@@ -9,7 +9,7 @@ import { relaunch } from "@utils/native";
 import { PluginNative } from "@utils/types";
 const Native = VencordNative.pluginHelpers.PluginRepo as PluginNative<typeof import("./native")>;
 
-export const VERSION = "1.1";
+export const VERSION = "1.2";
 
 async function getVersion() {
     const repoVersion = await (await fetch("https://raw.githubusercontent.com/ScattrdBlade/PluginsRepo/main/versionCheck.tsx", { cache: "no-cache" })).text();
