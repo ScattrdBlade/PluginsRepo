@@ -7,7 +7,7 @@
 import { classNameFactory } from "@api/Styles";
 import { Flex } from "@components/Flex";
 import { InfoIcon } from "@components/Icons";
-import { SettingsTab } from "@components/VencordSettings/shared";
+import { SettingsTab } from "@components/settings/tabs/BaseTab";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { PluginNative } from "@utils/types";

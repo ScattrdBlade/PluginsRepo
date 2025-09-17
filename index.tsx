@@ -24,7 +24,6 @@ export default definePlugin({
         }
     ],
     async start() {
-        // Check for updates at startup
         await checkUpdate();
 
         const customSettingsSections = (

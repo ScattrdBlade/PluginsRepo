@@ -19,7 +19,7 @@
 import "./addonCard.css";
 
 import { classNameFactory } from "@api/Styles";
-import { Badge } from "@components/Badge";
+import { AddonBadge } from "@components/settings/PluginBadge";
 import { Text } from "@webpack/common";
 
 import type { Props } from "../types";
@@ -36,7 +36,7 @@ export function AddonCard({ disabled, isNew, name, infoButton, footer, author, e
             <div className={cl("header")}>
                 <div className={cl("name-author")}>
                     <Text variant="text-md/bold" className={cl("name")}>
-                        {name}{isNew && <Badge text="NEW" color="#ED4245" />}
+                        {name}{isNew && <AddonBadge text="NEW" color="#ED4245" />}
                     </Text>
                     {!!author && (
                         <Text variant="text-md/normal" className={cl("author")}>

@@ -1,11 +1,13 @@
 /*
  * Vencord, a Discord client mod
- * Copyright (c) 2024 Vendicated and contributors
+ * Copyright (c) 2025 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { showNotification } from "@api/Notifications";
+import { relaunch } from "@utils/native";
 import { PluginNative } from "@utils/types";
-import { React, useEffect, useState } from "@webpack/common";
+import { React, showToast, useEffect, useState } from "@webpack/common";
 
 import { PluginInfo } from "../types";
 
@@ -30,6 +32,18 @@ const InstallButton: React.FC<{ plugin: PluginInfo; }> = ({ plugin }) => {
         checkIfInstalled();
     }, [plugin.filename, plugin.filesearch]);
 
+    const showRestartPrompt = (isInstall: boolean = true) => {
+        showNotification({
+            title: isInstall ? "Plugin installed successfully!" : "Plugin uninstalled successfully!",
+            body: "Click here to restart Discord and apply the changes.",
+            permanent: true,
+            noPersist: false,
+            onClick: () => {
+                relaunch();
+            }
+        });
+    };
+
     const handleInstall = async () => {
         if (isInstalled && !hovering) {
             console.log("Plugin already installed.");
@@ -39,12 +53,15 @@ const InstallButton: React.FC<{ plugin: PluginInfo; }> = ({ plugin }) => {
             console.log("Uninstalling...");
             setInstalling(true);
             try {
-                await Native.uninstallPlugin(plugin); // Pass the entire plugin object
+                await Native.uninstallPlugin(plugin);
                 setIsInstalled(false);
-                console.log("Uninstallation successful.");
+                console.log("Uninstallation successful");
+                showToast("Uninstallation Successful");
+                showRestartPrompt(false);
             } catch (error) {
                 console.error("Error uninstalling plugin", error);
                 setInstallError("Error uninstalling plugin: " + error);
+                showToast("Error uninstalling plugin");
             }
             setInstalling(false);
             setHovering(false);
@@ -55,15 +72,20 @@ const InstallButton: React.FC<{ plugin: PluginInfo; }> = ({ plugin }) => {
         try {
             console.log("Installing...");
             await Native.installPlugin(plugin);
+
             setIsInstalled(true);
             console.log("Installation Successful");
+            showToast("Installation Successful");
+            showRestartPrompt(true);
         } catch (error) {
             console.error("Error Installing Plugin", error);
-            setInstallError("Error Installing plugin" + error);
+            setInstallError("Error Installing plugin: " + error);
+            showToast("Error installing plugin");
         } finally {
             setInstalling(false);
         }
     };
+
     const buttonStyle = {
         fontSize: "16px",
         padding: "10px 20px",
